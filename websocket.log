@@ -1,0 +1,285 @@
+07.03.2023 13:14:58|Debug|WebSocket.sendHttpRequest:0|A request to the server:
+                          GET /ws/ HTTP/1.1
+                          User-Agent: websocket-sharp/1.0
+                          Host: stream.binance.com
+                          Upgrade: websocket
+                          Connection: Upgrade
+                          Sec-WebSocket-Key: nMv/cKaPKXjbAvf5CmTLUA==
+                          Sec-WebSocket-Version: 13
+07.03.2023 13:14:59|Debug|WebSocket.sendHttpRequest:0|A response to this request:
+                          HTTP/1.1 400 Bad Request
+                          Date: Tue, 07 Mar 2023 08:15:01 GMT
+                          Content-Type: text/plain
+                          Content-Length: 38
+                          Connection: keep-alive
+                          
+                          One or more stream names are not valid
+07.03.2023 13:14:59|Error|WebSocket.doHandshake:0|Not a WebSocket connection response.
+07.03.2023 13:14:59|Trace|WebSocket.close:0|Begin closing the connection.
+07.03.2023 13:14:59|Debug|WebSocket.closeHandshake:0|Was clean?: False
+                            sent: False
+                            received: True
+07.03.2023 13:14:59|Trace|WebSocket.close:0|End closing the connection.
+07.03.2023 13:16:04|Debug|WebSocket.sendHttpRequest:0|A request to the server:
+                          GET /ws/ HTTP/1.1
+                          User-Agent: websocket-sharp/1.0
+                          Host: stream.binance.com
+                          Upgrade: websocket
+                          Connection: Upgrade
+                          Sec-WebSocket-Key: avorP5zFG8Me9q6OaseQYQ==
+                          Sec-WebSocket-Version: 13
+07.03.2023 13:16:05|Debug|WebSocket.sendHttpRequest:0|A response to this request:
+                          HTTP/1.1 400 Bad Request
+                          Date: Tue, 07 Mar 2023 08:16:07 GMT
+                          Content-Type: text/plain
+                          Content-Length: 38
+                          Connection: keep-alive
+                          
+                          One or more stream names are not valid
+07.03.2023 13:16:05|Error|WebSocket.doHandshake:0|Not a WebSocket connection response.
+07.03.2023 13:16:05|Trace|WebSocket.close:0|Begin closing the connection.
+07.03.2023 13:16:05|Debug|WebSocket.closeHandshake:0|Was clean?: False
+                            sent: False
+                            received: True
+07.03.2023 13:16:05|Trace|WebSocket.close:0|End closing the connection.
+07.03.2023 13:17:41|Debug|WebSocket.sendHttpRequest:0|A request to the server:
+                          GET /ws/ HTTP/1.1
+                          User-Agent: websocket-sharp/1.0
+                          Host: stream.binance.com
+                          Upgrade: websocket
+                          Connection: Upgrade
+                          Sec-WebSocket-Key: CfgW02lw8NPn6qeqhgBu9Q==
+                          Sec-WebSocket-Version: 13
+07.03.2023 13:17:42|Debug|WebSocket.sendHttpRequest:0|A response to this request:
+                          HTTP/1.1 400 Bad Request
+                          Date: Tue, 07 Mar 2023 08:17:44 GMT
+                          Content-Type: text/plain
+                          Content-Length: 38
+                          Connection: keep-alive
+                          
+                          One or more stream names are not valid
+07.03.2023 13:17:42|Error|WebSocket.doHandshake:0|Not a WebSocket connection response.
+07.03.2023 13:17:42|Trace|WebSocket.close:0|Begin closing the connection.
+07.03.2023 13:17:42|Debug|WebSocket.closeHandshake:0|Was clean?: False
+                            sent: False
+                            received: True
+07.03.2023 13:17:42|Trace|WebSocket.close:0|End closing the connection.
+07.03.2023 13:17:42|Error|WebSocket.Send:0|The WebSocket connection has already been closed.
+07.03.2023 13:58:00|Debug|WebSocket.sendHttpRequest:0|A request to the server:
+                          GET /ws/ HTTP/1.1
+                          User-Agent: websocket-sharp/1.0
+                          Host: stream.binance.com
+                          Upgrade: websocket
+                          Connection: Upgrade
+                          Sec-WebSocket-Key: Qi6jhi5pz5R7DmH6gK+gkA==
+                          Sec-WebSocket-Version: 13
+07.03.2023 13:58:01|Debug|WebSocket.sendHttpRequest:0|A response to this request:
+                          HTTP/1.1 400 Bad Request
+                          Date: Tue, 07 Mar 2023 08:58:03 GMT
+                          Content-Type: text/plain
+                          Content-Length: 38
+                          Connection: keep-alive
+                          
+                          One or more stream names are not valid
+07.03.2023 13:58:01|Error|WebSocket.doHandshake:0|Not a WebSocket connection response.
+07.03.2023 13:58:01|Trace|WebSocket.close:0|Begin closing the connection.
+07.03.2023 13:58:01|Debug|WebSocket.closeHandshake:0|Was clean?: False
+                            sent: False
+                            received: True
+07.03.2023 13:58:01|Trace|WebSocket.close:0|End closing the connection.
+07.03.2023 13:58:02|Error|WebSocket.Send:0|The WebSocket connection has already been closed.
+07.03.2023 13:59:27|Debug|WebSocket.sendHttpRequest:0|A request to the server:
+                          GET /ws/ HTTP/1.1
+                          User-Agent: websocket-sharp/1.0
+                          Host: stream.binance.com
+                          Upgrade: websocket
+                          Connection: Upgrade
+                          Sec-WebSocket-Key: tqhAXL9ioNGy+laIsU0jPg==
+                          Sec-WebSocket-Version: 13
+07.03.2023 13:59:28|Debug|WebSocket.sendHttpRequest:0|A response to this request:
+                          HTTP/1.1 400 Bad Request
+                          Date: Tue, 07 Mar 2023 08:59:30 GMT
+                          Content-Type: text/plain
+                          Content-Length: 38
+                          Connection: keep-alive
+                          
+                          One or more stream names are not valid
+07.03.2023 13:59:28|Error|WebSocket.doHandshake:0|Not a WebSocket connection response.
+07.03.2023 13:59:28|Trace|WebSocket.close:0|Begin closing the connection.
+07.03.2023 13:59:28|Debug|WebSocket.closeHandshake:0|Was clean?: False
+                            sent: False
+                            received: True
+07.03.2023 13:59:28|Trace|WebSocket.close:0|End closing the connection.
+07.03.2023 13:59:28|Error|WebSocket.Send:0|The WebSocket connection has already been closed.
+07.03.2023 14:01:18|Debug|WebSocket.sendHttpRequest:0|A request to the server:
+                          GET /ws/ HTTP/1.1
+                          User-Agent: websocket-sharp/1.0
+                          Host: stream.binance.com
+                          Upgrade: websocket
+                          Connection: Upgrade
+                          Sec-WebSocket-Key: OoWgQczHVTaHE5enjglJSQ==
+                          Sec-WebSocket-Version: 13
+07.03.2023 14:01:19|Debug|WebSocket.sendHttpRequest:0|A response to this request:
+                          HTTP/1.1 400 Bad Request
+                          Date: Tue, 07 Mar 2023 09:01:21 GMT
+                          Content-Type: text/plain
+                          Content-Length: 38
+                          Connection: keep-alive
+                          
+                          One or more stream names are not valid
+07.03.2023 14:01:19|Error|WebSocket.doHandshake:0|Not a WebSocket connection response.
+07.03.2023 14:01:19|Trace|WebSocket.close:0|Begin closing the connection.
+07.03.2023 14:01:19|Debug|WebSocket.closeHandshake:0|Was clean?: False
+                            sent: False
+                            received: True
+07.03.2023 14:01:19|Trace|WebSocket.close:0|End closing the connection.
+07.03.2023 14:01:19|Error|WebSocket.Send:0|The WebSocket connection has already been closed.
+07.03.2023 14:02:04|Debug|WebSocket.sendHttpRequest:0|A request to the server:
+                          GET /ws/ HTTP/1.1
+                          User-Agent: websocket-sharp/1.0
+                          Host: stream.binance.com
+                          Upgrade: websocket
+                          Connection: Upgrade
+                          Sec-WebSocket-Key: 8+M8a50GH1Z/nrKR3MJP+Q==
+                          Sec-WebSocket-Version: 13
+07.03.2023 14:02:04|Debug|WebSocket.sendHttpRequest:0|A response to this request:
+                          HTTP/1.1 400 Bad Request
+                          Date: Tue, 07 Mar 2023 09:02:07 GMT
+                          Content-Type: text/plain
+                          Content-Length: 38
+                          Connection: keep-alive
+                          
+                          One or more stream names are not valid
+07.03.2023 14:02:04|Error|WebSocket.doHandshake:0|Not a WebSocket connection response.
+07.03.2023 14:02:04|Trace|WebSocket.close:0|Begin closing the connection.
+07.03.2023 14:02:04|Debug|WebSocket.closeHandshake:0|Was clean?: False
+                            sent: False
+                            received: True
+07.03.2023 14:02:04|Trace|WebSocket.close:0|End closing the connection.
+07.03.2023 14:02:24|Error|WebSocket.Send:0|The WebSocket connection has already been closed.
+07.03.2023 14:03:33|Debug|WebSocket.sendHttpRequest:0|A request to the server:
+                          GET /ws/ HTTP/1.1
+                          User-Agent: websocket-sharp/1.0
+                          Host: stream.binance.com
+                          Upgrade: websocket
+                          Connection: Upgrade
+                          Sec-WebSocket-Key: 9ET9c3VNjK7/KAnTmvRM2g==
+                          Sec-WebSocket-Version: 13
+07.03.2023 14:03:33|Debug|WebSocket.sendHttpRequest:0|A response to this request:
+                          HTTP/1.1 400 Bad Request
+                          Date: Tue, 07 Mar 2023 09:03:35 GMT
+                          Content-Type: text/plain
+                          Content-Length: 38
+                          Connection: keep-alive
+                          
+                          One or more stream names are not valid
+07.03.2023 14:03:33|Error|WebSocket.doHandshake:0|Not a WebSocket connection response.
+07.03.2023 14:03:33|Trace|WebSocket.close:0|Begin closing the connection.
+07.03.2023 14:03:33|Debug|WebSocket.closeHandshake:0|Was clean?: False
+                            sent: False
+                            received: True
+07.03.2023 14:03:33|Trace|WebSocket.close:0|End closing the connection.
+07.03.2023 14:03:41|Error|WebSocket.Send:0|The WebSocket connection has already been closed.
+07.03.2023 14:04:19|Debug|WebSocket.sendHttpRequest:0|A request to the server:
+                          GET /ws/ HTTP/1.1
+                          User-Agent: websocket-sharp/1.0
+                          Host: stream.binance.com
+                          Upgrade: websocket
+                          Connection: Upgrade
+                          Sec-WebSocket-Key: BtkPQJwobxmuBHhVxytuVA==
+                          Sec-WebSocket-Version: 13
+07.03.2023 14:04:20|Debug|WebSocket.sendHttpRequest:0|A response to this request:
+                          HTTP/1.1 400 Bad Request
+                          Date: Tue, 07 Mar 2023 09:04:22 GMT
+                          Content-Type: text/plain
+                          Content-Length: 38
+                          Connection: keep-alive
+                          
+                          One or more stream names are not valid
+07.03.2023 14:04:20|Error|WebSocket.doHandshake:0|Not a WebSocket connection response.
+07.03.2023 14:04:20|Trace|WebSocket.close:0|Begin closing the connection.
+07.03.2023 14:04:20|Debug|WebSocket.closeHandshake:0|Was clean?: False
+                            sent: False
+                            received: True
+07.03.2023 14:04:20|Trace|WebSocket.close:0|End closing the connection.
+07.03.2023 14:04:54|Debug|WebSocket.sendHttpRequest:0|A request to the server:
+                          GET /ws HTTP/1.1
+                          User-Agent: websocket-sharp/1.0
+                          Host: stream.binance.com
+                          Upgrade: websocket
+                          Connection: Upgrade
+                          Sec-WebSocket-Key: 52wGEEP8z8kP9kBfT86qmg==
+                          Sec-WebSocket-Version: 13
+07.03.2023 14:04:55|Debug|WebSocket.sendHttpRequest:0|A response to this request:
+                          HTTP/1.1 101 Switching Protocols
+                          Date: Tue, 07 Mar 2023 09:04:57 GMT
+                          Connection: upgrade
+                          Upgrade: websocket
+                          Sec-WebSocket-Accept: ubGvMPnlpNeH0K+UIF4ZhYvKZbg=
+07.03.2023 15:50:33|Debug|WebSocket.sendHttpRequest:0|A request to the server:
+                          GET /ws HTTP/1.1
+                          User-Agent: websocket-sharp/1.0
+                          Host: stream.binance.com
+                          Upgrade: websocket
+                          Connection: Upgrade
+                          Sec-WebSocket-Key: JcS7IO7CT2XVz4q5AiOPEA==
+                          Sec-WebSocket-Version: 13
+07.03.2023 15:50:34|Debug|WebSocket.sendHttpRequest:0|A response to this request:
+                          HTTP/1.1 101 Switching Protocols
+                          Date: Tue, 07 Mar 2023 10:50:36 GMT
+                          Connection: upgrade
+                          Upgrade: websocket
+                          Sec-WebSocket-Accept: Oxf0YbfGBglJU0RcMeY6Mykt8uQ=
+07.03.2023 15:52:05|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+07.03.2023 15:55:05|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+07.03.2023 15:58:05|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+07.03.2023 16:01:05|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+07.03.2023 16:04:05|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+07.03.2023 16:07:05|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+07.03.2023 16:10:05|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+07.03.2023 16:13:05|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+07.03.2023 16:14:55|Debug|WebSocket.sendHttpRequest:0|A request to the server:
+                          GET /ws HTTP/1.1
+                          User-Agent: websocket-sharp/1.0
+                          Host: stream.binance.com
+                          Upgrade: websocket
+                          Connection: Upgrade
+                          Sec-WebSocket-Key: rImzgg6/C5JtNUYOfQHPpw==
+                          Sec-WebSocket-Version: 13
+07.03.2023 16:14:56|Debug|WebSocket.sendHttpRequest:0|A response to this request:
+                          HTTP/1.1 101 Switching Protocols
+                          Date: Tue, 07 Mar 2023 11:14:58 GMT
+                          Connection: upgrade
+                          Upgrade: websocket
+                          Sec-WebSocket-Accept: ZPqkcjBUP4H3EMgRmBmMkYSzvyg=
+07.03.2023 16:15:28|Debug|WebSocket.sendHttpRequest:0|A request to the server:
+                          GET /ws HTTP/1.1
+                          User-Agent: websocket-sharp/1.0
+                          Host: stream.binance.com
+                          Upgrade: websocket
+                          Connection: Upgrade
+                          Sec-WebSocket-Key: 0a2WyEuLwkUFcEcMHO5jWw==
+                          Sec-WebSocket-Version: 13
+07.03.2023 16:15:28|Debug|WebSocket.sendHttpRequest:0|A response to this request:
+                          HTTP/1.1 101 Switching Protocols
+                          Date: Tue, 07 Mar 2023 11:15:31 GMT
+                          Connection: upgrade
+                          Upgrade: websocket
+                          Sec-WebSocket-Accept: EoJPaU/F+n4BKj8MidHldZIgNuc=
+07.03.2023 16:16:00|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+07.03.2023 16:19:01|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+07.03.2023 16:25:28|Debug|WebSocket.sendHttpRequest:0|A request to the server:
+                          GET /ws HTTP/1.1
+                          User-Agent: websocket-sharp/1.0
+                          Host: stream.binance.com
+                          Upgrade: websocket
+                          Connection: Upgrade
+                          Sec-WebSocket-Key: Hy6VIv5qWkYETZdquARgLA==
+                          Sec-WebSocket-Version: 13
+07.03.2023 16:25:28|Debug|WebSocket.sendHttpRequest:0|A response to this request:
+                          HTTP/1.1 101 Switching Protocols
+                          Date: Tue, 07 Mar 2023 11:25:30 GMT
+                          Connection: upgrade
+                          Upgrade: websocket
+                          Sec-WebSocket-Accept: wkrBpn9IK+t35Kd0l1wbS7pVeJ0=
+07.03.2023 16:26:29|Trace|WebSocket.processPingFrame:0|Returned a Pong.

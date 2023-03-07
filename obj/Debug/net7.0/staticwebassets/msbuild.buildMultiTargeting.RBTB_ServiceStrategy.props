@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\RBTB_ServiceStrategy.props" />
+</Project>
