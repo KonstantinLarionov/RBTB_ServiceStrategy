@@ -283,3 +283,113 @@
                           Upgrade: websocket
                           Sec-WebSocket-Accept: wkrBpn9IK+t35Kd0l1wbS7pVeJ0=
 07.03.2023 16:26:29|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+07.03.2023 16:29:29|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+07.03.2023 16:32:29|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+07.03.2023 16:35:29|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+07.03.2023 16:38:29|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+07.03.2023 16:41:29|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+07.03.2023 16:44:29|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+07.03.2023 16:47:30|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+07.03.2023 16:50:30|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+07.03.2023 16:53:30|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+07.03.2023 16:56:30|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+07.03.2023 16:59:30|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+07.03.2023 17:02:30|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+07.03.2023 17:05:30|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+07.03.2023 17:08:30|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+09.03.2023 15:03:55|Debug|WebSocket.sendHttpRequest:0|A request to the server:
+                          GET /ws HTTP/1.1
+                          User-Agent: websocket-sharp/1.0
+                          Host: stream.binance.com
+                          Upgrade: websocket
+                          Connection: Upgrade
+                          Sec-WebSocket-Key: 3BaOaJxj7qN2Ya+DkwQopQ==
+                          Sec-WebSocket-Version: 13
+09.03.2023 15:03:56|Debug|WebSocket.sendHttpRequest:0|A response to this request:
+                          HTTP/1.1 101 Switching Protocols
+                          Date: Thu, 09 Mar 2023 10:03:56 GMT
+                          Connection: upgrade
+                          Upgrade: websocket
+                          Sec-WebSocket-Accept: F9fbPbzsywT0Yu0k82V3uIquoOw=
+09.03.2023 15:06:16|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+09.03.2023 15:09:16|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+09.03.2023 15:12:16|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+09.03.2023 15:13:24|Debug|WebSocket.sendHttpRequest:0|A request to the server:
+                          GET /ws HTTP/1.1
+                          User-Agent: websocket-sharp/1.0
+                          Host: stream.binance.com
+                          Upgrade: websocket
+                          Connection: Upgrade
+                          Sec-WebSocket-Key: 8afYscdJN33p9QGSGLVE2Q==
+                          Sec-WebSocket-Version: 13
+09.03.2023 15:13:25|Debug|WebSocket.sendHttpRequest:0|A response to this request:
+                          HTTP/1.1 101 Switching Protocols
+                          Date: Thu, 09 Mar 2023 10:13:25 GMT
+                          Connection: upgrade
+                          Upgrade: websocket
+                          Sec-WebSocket-Accept: Szva7y2Pv6XcVi/chnWGstOEEqg=
+09.03.2023 15:13:59|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+09.03.2023 15:15:42|Debug|WebSocket.sendHttpRequest:0|A request to the server:
+                          GET /ws HTTP/1.1
+                          User-Agent: websocket-sharp/1.0
+                          Host: stream.binance.com
+                          Upgrade: websocket
+                          Connection: Upgrade
+                          Sec-WebSocket-Key: 8HAglSPdH6AyIXTUJc82xw==
+                          Sec-WebSocket-Version: 13
+09.03.2023 15:15:42|Debug|WebSocket.sendHttpRequest:0|A response to this request:
+                          HTTP/1.1 101 Switching Protocols
+                          Date: Thu, 09 Mar 2023 10:15:42 GMT
+                          Connection: upgrade
+                          Upgrade: websocket
+                          Sec-WebSocket-Accept: VGUtgAESJvDCaaQmvEfhCztK6qA=
+09.03.2023 15:17:55|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+09.03.2023 15:20:55|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+09.03.2023 15:23:56|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+09.03.2023 15:26:56|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+09.03.2023 15:29:56|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+09.03.2023 15:32:56|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+09.03.2023 15:35:56|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+09.03.2023 15:38:56|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+09.03.2023 15:41:56|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+09.03.2023 15:44:56|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+09.03.2023 15:47:56|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+09.03.2023 15:50:56|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+09.03.2023 15:53:56|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+09.03.2023 15:56:56|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+09.03.2023 15:59:56|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+09.03.2023 16:02:56|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+10.03.2023 12:03:18|Debug|WebSocket.sendHttpRequest:0|A request to the server:
+                          GET /ws HTTP/1.1
+                          User-Agent: websocket-sharp/1.0
+                          Host: stream.binance.com
+                          Upgrade: websocket
+                          Connection: Upgrade
+                          Sec-WebSocket-Key: /raNq7e7cp4qfksTwItNIA==
+                          Sec-WebSocket-Version: 13
+10.03.2023 12:03:18|Debug|WebSocket.sendHttpRequest:0|A response to this request:
+                          HTTP/1.1 101 Switching Protocols
+                          Date: Fri, 10 Mar 2023 07:03:18 GMT
+                          Connection: upgrade
+                          Upgrade: websocket
+                          Sec-WebSocket-Accept: r9nzcb3xW9CQ+m5H2i3HDzhivIo=
+10.03.2023 12:03:26|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+10.03.2023 12:06:24|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+10.03.2023 12:09:25|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+10.03.2023 12:12:26|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+10.03.2023 12:15:25|Trace|WebSocket.processPingFrame:0|Returned a Pong.
+14.03.2023 14:28:27|Debug|WebSocket.sendHttpRequest:0|A request to the server:
+                          GET /ws HTTP/1.1
+                          User-Agent: websocket-sharp/1.0
+                          Host: stream.binance.com
+                          Upgrade: websocket
+                          Connection: Upgrade
+                          Sec-WebSocket-Key: 8OnPQed9U5EUuioBUugYZA==
+                          Sec-WebSocket-Version: 13
+14.03.2023 14:28:28|Debug|WebSocket.sendHttpRequest:0|A response to this request:
+                          HTTP/1.1 101 Switching Protocols
+                          Date: Tue, 14 Mar 2023 09:28:30 GMT
+                          Connection: upgrade
+                          Upgrade: websocket
+                          Sec-WebSocket-Accept: PN9nxg+GL0N/YLsT5mEWYwlypSI=
+14.03.2023 14:30:31|Trace|WebSocket.processPingFrame:0|Returned a Pong.

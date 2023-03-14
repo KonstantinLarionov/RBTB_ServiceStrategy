@@ -1,0 +1,28 @@
+10.03.2023 12:37:16|Debug|WebSocket.sendHttpRequest:0|A request to the server:
+                          GET /ws HTTP/1.1
+                          User-Agent: websocket-sharp/1.0
+                          Host: stream.binance.com
+                          Upgrade: websocket
+                          Connection: Upgrade
+                          Sec-WebSocket-Key: 38zh64mahmFY5tc3sN6Y8Q==
+                          Sec-WebSocket-Version: 13
+10.03.2023 12:37:16|Debug|WebSocket.sendHttpRequest:0|A response to this request:
+                          HTTP/1.1 101 Switching Protocols
+                          Date: Fri, 10 Mar 2023 07:37:16 GMT
+                          Connection: upgrade
+                          Upgrade: websocket
+                          Sec-WebSocket-Accept: iCdacKzF18q3gxo2GduXTXLt6V8=
+10.03.2023 12:39:47|Debug|WebSocket.sendHttpRequest:0|A request to the server:
+                          GET /ws HTTP/1.1
+                          User-Agent: websocket-sharp/1.0
+                          Host: stream.binance.com
+                          Upgrade: websocket
+                          Connection: Upgrade
+                          Sec-WebSocket-Key: 7wg25A7aqkbsXPCYvuoF4Q==
+                          Sec-WebSocket-Version: 13
+10.03.2023 12:39:48|Debug|WebSocket.sendHttpRequest:0|A response to this request:
+                          HTTP/1.1 101 Switching Protocols
+                          Date: Fri, 10 Mar 2023 07:39:47 GMT
+                          Connection: upgrade
+                          Upgrade: websocket
+                          Sec-WebSocket-Accept: T5kqGAJBklr1s/nnlHptIY0lOwE=
