@@ -24,6 +24,7 @@ namespace RBTB_ServiceStrategy.Strategies
     public class LevelStrategy
     {
         private TelegramClient _tg;
+        private readonly ILogger<LevelStrategy> _logger;
         private readonly LevelStrategyOption _lso;
         private readonly string _wsurl;
         private BinanceRestClient _client;
@@ -35,10 +36,13 @@ namespace RBTB_ServiceStrategy.Strategies
         public decimal ScopePrice { get; set; } = 5;
         public string Symbol { get; set; } = "BTCUSDT";
         public bool IsStart { get; set; } = false;
+        public int ScoopPriceDown { get; set; } = 50;
+        public List<decimal> PriceBufferComeDown { get; set; } = new List<decimal>();
 
-        public LevelStrategy(TelegramClient telegramClient, IOptions<LevelStrategyOption> lso)
+        public LevelStrategy(TelegramClient telegramClient, IOptions<LevelStrategyOption> lso, ILogger<LevelStrategy> logger)
         {
             _tg = telegramClient;
+            _logger = logger;
             _lso = lso.Value;
             _wsurl = _lso.WsUrl;
 
@@ -83,6 +87,7 @@ namespace RBTB_ServiceStrategy.Strategies
 
         public void Init()
         {
+            _logger.LogInformation("Инициализация стратегии уровней");
             _socket.Symbol = this.Symbol;
             _socket.Start(_wsurl);
             GetLevels();
@@ -102,15 +107,55 @@ namespace RBTB_ServiceStrategy.Strategies
             if (!IsStart)
             { return false; }
 
+            AccumulationPriceDown_Long();
+            
             var finder = PriceLevel
                 .FirstOrDefault(x => (x + ScopePrice >= StateNow.PriceNow) 
                                             && (x - ScopePrice <= StateNow.PriceNow)
                                             && StateNow.PriceNow != 0);
-            
-            if (finder != 0) 
+
+            if (finder != 0 && IsPriceDown_Long())
+            {
+                _logger.LogInformation("Все условия стратегии соблюдены, отсылаю сигнал на торговлю: " + finder);
                 WsEvents.InvokeSTE(StateNow.PriceNow, Symbol, finder);
-            
+            }
+
             return true;
+        }
+
+        private void AccumulationPriceDown_Long()
+        {
+            if (StateNow.PriceNow == 0)
+                return;
+
+            if (PriceBufferComeDown.Count == 0)
+            { PriceBufferComeDown.Add(StateNow.PriceNow); return; }
+            
+            if (PriceBufferComeDown.Any(x => x < StateNow.PriceNow))
+            { PriceBufferComeDown.Clear(); }
+            else
+            { PriceBufferComeDown.Add(StateNow.PriceNow); }
+
+            if (PriceBufferComeDown.Count > 60)
+            { PriceBufferComeDown.RemoveAt(0); }
+        }
+
+        private bool IsPriceDown_Long() 
+        {
+            _logger.LogInformation("Найден уровень");
+            _logger.LogInformation("Проверяю историю цены на отскок..");
+
+            if (PriceBufferComeDown.Count >= ScoopPriceDown)
+            {
+                _logger.LogInformation("История подтвердила отскок");
+                return true;
+            }
+            else
+            {
+                _logger.LogInformation("Отскок не подтвержден, список цен:");
+                _logger.LogInformation(string.Join("\r\n", PriceBufferComeDown));
+                return false;
+            }
         }
 
         #region [LevelTool]
