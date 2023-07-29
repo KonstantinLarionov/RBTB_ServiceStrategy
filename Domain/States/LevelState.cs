@@ -7,7 +7,7 @@ public class LevelStrategyState
     private string levels;
     private string levelsUse;
     private string positionNow;
-    private bool isUpTrend;
+    private bool isUpTrend = false;
 
     public bool IsUpTrend { get => isUpTrend; set { isUpTrend = value; } }
     public decimal PriceNow { get => priceNow; set { priceNow = value;  } }

@@ -14,6 +14,9 @@ using BinanceMapper.Spot.Exchange.V3.Responses;
 using BinanceMapper.Spot.MarketWS.Events;
 using BinanceMapper.Spot.UserStream.Events;
 using Microsoft.Extensions.Options;
+
+using RBTB_ServiceStrategy.Database;
+using RBTB_ServiceStrategy.Database.Entities;
 using RBTB_ServiceStrategy.Domain.Options;
 using RBTB_ServiceStrategy.Domain.States;
 using RBTB_ServiceStrategy.Markets.Binance;
@@ -25,7 +28,7 @@ namespace RBTB_ServiceStrategy.Strategies
     {
         private TelegramClient _tg;
         private readonly ILogger<LevelStrategy> _logger;
-        private readonly LevelStrategyOption _lso;
+		private readonly LevelStrategyOption _lso;
         private readonly string _wsurl;
         private BinanceRestClient _client;
         private BinanceWebSocket _socket;
@@ -39,11 +42,12 @@ namespace RBTB_ServiceStrategy.Strategies
         public int ScoopPriceDown { get; set; } = 50;
         public List<decimal> PriceBufferComeDown { get; set; } = new List<decimal>();
 
-        public LevelStrategy(TelegramClient telegramClient, IOptions<LevelStrategyOption> lso, ILogger<LevelStrategy> logger)
+        public LevelStrategy(TelegramClient telegramClient, IOptions<LevelStrategyOption> lso, ILogger<LevelStrategy> logger 
+			)
         {
             _tg = telegramClient;
             _logger = logger;
-            _lso = lso.Value;
+			_lso = lso.Value;
             _wsurl = _lso.WsUrl;
 
             ScopePrice = _lso.ScopePrice;
@@ -90,16 +94,17 @@ namespace RBTB_ServiceStrategy.Strategies
             _logger.LogInformation("Инициализация стратегии уровней");
             _socket.Symbol = this.Symbol;
             _socket.Start(_wsurl);
-            GetLevels();
+           // GetLevels();
         }
 
 
         public void CalcTrend()
         {
-            if (_client.RequestCandles(out var candles, Symbol, CandleInterval.FourHours, limit: 100))
+            if (_client.RequestCandles(out var candles, Symbol, CandleInterval.FourHours, limit: 200))
             {
-                this.StateNow.IsUpTrend = true; // CalcTrend(candles);
-            }
+				
+				this.StateNow.IsUpTrend = CalcTrend( candles );
+			}
         }
 
         public bool Handle()
@@ -116,7 +121,7 @@ namespace RBTB_ServiceStrategy.Strategies
 
             if (finder != 0 && IsPriceDown_Long())
             {
-                _logger.LogInformation("Все условия стратегии соблюдены, отсылаю сигнал на торговлю: " + finder);
+                //_logger.LogInformation("Все условия стратегии соблюдены, отсылаю сигнал на торговлю: " + finder);
                 WsEvents.InvokeSTE(StateNow.PriceNow, Symbol, finder);
             }
 
@@ -142,38 +147,98 @@ namespace RBTB_ServiceStrategy.Strategies
 
         private bool IsPriceDown_Long() 
         {
-            _logger.LogInformation("Найден уровень");
-            _logger.LogInformation("Проверяю историю цены на отскок..");
+            //_logger.LogInformation("Найден уровень");
+            //_logger.LogInformation("Проверяю историю цены на отскок..");
 
             if (PriceBufferComeDown.Count >= ScoopPriceDown)
             {
-                _logger.LogInformation("История подтвердила отскок");
+                //_logger.LogInformation("История подтвердила отскок");
                 return true;
             }
             else
             {
-                _logger.LogInformation("Отскок не подтвержден, список цен:");
-                _logger.LogInformation(string.Join("\r\n", PriceBufferComeDown));
+                //_logger.LogInformation("Отскок не подтвержден, список цен:");
+                //_logger.LogInformation(string.Join("\r\n", PriceBufferComeDown));
                 return false;
             }
         }
 
-        #region [LevelTool]
-        /// <summary>
-        /// 
-        /// </summary>
-        private void GetLevels()
-        {
-            using (var fs = new StreamReader(@"levels.txt"))
-            {
-                while (true)
-                {
-                    string temp = fs.ReadLine();
-                    if (temp == null) break;
-                    PriceLevel.Add(Convert.ToDecimal(temp));
-                }
-            }
-        }
+		#region [LevelTool]
+		/// <summary>
+		/// 
+		/// </summary>
+		public void CreateTradingLevel( List<Level> levels_buffer )
+		{
+			List<Level> levels = new List<Level>();
+			
+			levels = levels_buffer
+				.OrderByDescending( x => x.Price )
+				.Select( x => { x.Price = (int)x.Price;  return x; } )
+				.ToList();
+			levels = levels
+				.GroupBy( x => x.Price )
+				.Select( x => { return new Level() { Price = x.Key, Volume = x.Sum( v => v.Volume ) }; } )
+				.ToList();
+
+			List<decimal> fractals = new List<decimal>();
+			for ( int i = 0; i < levels.Count; i++ )
+			{
+				if ( i == 0 )
+				{
+					if ( levels[i].Volume > levels[i + 1].Volume &&
+						 levels[i].Volume > levels[i + 2].Volume )
+					{
+						fractals.Add( levels[i].Price );
+					}
+				}
+				else if ( i == 1 )
+				{
+					if ( levels[i].Volume > levels[i - 1].Volume &&
+							 levels[i].Volume > levels[i + 1].Volume &&
+							 levels[i].Volume > levels[i + 2].Volume )
+					{
+						fractals.Add( levels[i].Price );
+					}
+				}
+
+				else if ( i == levels.Count - 1 )
+				{
+					if ( levels[i].Volume > levels[i - 1].Volume &&
+							 levels[i].Volume > levels[i - 2].Volume)
+					{
+						fractals.Add( levels[i].Price );
+					}
+				}
+				else if ( i == levels.Count - 2 )
+				{
+					if ( levels[i].Volume > levels[i - 1].Volume &&
+							 levels[i].Volume > levels[i - 2].Volume &&
+							 levels[i].Volume > levels[i + 1].Volume )
+					{
+						fractals.Add( levels[i].Price );
+					}
+				}
+
+				else
+				{
+					if ( levels[i].Volume > levels[i - 1].Volume &&
+						 levels[i].Volume > levels[i - 2].Volume &&
+						 levels[i].Volume > levels[i + 1].Volume &&
+						 levels[i].Volume > levels[i + 2].Volume )
+					{
+						fractals.Add( levels[i].Price );
+					}
+				}
+			}
+
+			if ( fractals.Count != 0 )
+			{
+				PriceLevel.Clear();
+				PriceLevel.AddRange( fractals );
+				if(PriceLevel.Count != 0)
+					Console.Write( $"[{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}] Уровни для торговли: {String.Join( " ", PriceLevel.Select( p => p.ToString() ).ToArray() )}" );
+			}
+		}
         /// <summary>
         /// 
         /// </summary>
@@ -181,6 +246,7 @@ namespace RBTB_ServiceStrategy.Strategies
         /// <returns>true - вверх</returns>
         private bool CalcTrend(IReadOnlyList<Candle> candles)
         {
+			return true;
             var ma = new MovingAverage();
             foreach (var candle in candles)
             {
