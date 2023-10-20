@@ -170,25 +170,124 @@ namespace RBTB_ServiceStrategy.Strategies
 		public void CreateTradingLevel( List<Level> levels_buffer )
 		{
 			List<Level> levels = new List<Level>();
-			
+
 			levels = levels_buffer
 				.OrderByDescending( x => x.Price )
-				.Select( x => { x.Price = (int)x.Price;  return x; } )
+				.Select( x => { x.Price = (int)x.Price; return x; } )
 				.ToList();
 			levels = levels
 				.GroupBy( x => x.Price )
 				.Select( x => { return new Level() { Price = x.Key, Volume = x.Sum( v => v.Volume ) }; } )
 				.ToList();
 
-			List<decimal> fractals = new List<decimal>();
+			List<(decimal, decimal)> first_fractals = FindFractalsLow( levels.Select(x=> (x.Price, x.Volume)).ToList() );
+			List<(decimal, decimal)> second_fractals = FindFractalsLow( first_fractals );
+
+
+			if ( second_fractals.Count != 0 )
+			{
+				PriceLevel.Clear();
+				PriceLevel.AddRange( second_fractals.Select(x=>x.Item1).ToList() );
+				if ( PriceLevel.Count != 0 )
+					Console.Write( $"[{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}] Уровни для торговли: {String.Join( " ", PriceLevel.Select( p => p.ToString() ).ToArray() )}" );
+			}
+		}
+
+		private static List<(decimal, decimal)> FindFractals( List<(decimal Price, decimal Volume)> levels )
+		{
+			List<(decimal, decimal)> fractals = new List<(decimal, decimal)>();
 			for ( int i = 0; i < levels.Count; i++ )
 			{
 				if ( i == 0 )
 				{
 					if ( levels[i].Volume > levels[i + 1].Volume &&
-						 levels[i].Volume > levels[i + 2].Volume )
+						 levels[i].Volume > levels[i + 2].Volume &&
+						 levels[i].Volume > levels[i + 3].Volume )
 					{
-						fractals.Add( levels[i].Price );
+						fractals.Add( (levels[i].Price, levels[i].Volume) );
+					}
+				}
+				else if ( i == 1 )
+				{
+					if ( levels[i].Volume > levels[i - 1].Volume &&
+							 levels[i].Volume > levels[i + 1].Volume &&
+							 levels[i].Volume > levels[i + 2].Volume &&
+							 levels[i].Volume > levels[i + 3].Volume )
+					{
+						fractals.Add( (levels[i].Price, levels[i].Volume) );
+					}
+				}
+				else if ( i == 2 )
+				{
+					if ( levels[i].Volume > levels[i - 1].Volume &&
+							levels[i].Volume > levels[i - 2].Volume &&
+							 levels[i].Volume > levels[i + 1].Volume &&
+							 levels[i].Volume > levels[i + 2].Volume &&
+							 levels[i].Volume > levels[i + 3].Volume )
+					{
+						fractals.Add( (levels[i].Price, levels[i].Volume) );
+					}
+				}
+
+				else if ( i == levels.Count - 1 )
+				{
+					if ( levels[i].Volume > levels[i - 1].Volume &&
+							 levels[i].Volume > levels[i - 2].Volume &&
+							 levels[i].Volume > levels[i - 3].Volume )
+					{
+						fractals.Add( (levels[i].Price, levels[i].Volume) );
+					}
+				}
+				else if ( i == levels.Count - 2 )
+				{
+					if ( levels[i].Volume > levels[i - 1].Volume &&
+							 levels[i].Volume > levels[i - 2].Volume &&
+							 levels[i].Volume > levels[i - 3].Volume &&
+							 levels[i].Volume > levels[i + 1].Volume )
+					{
+						fractals.Add( (levels[i].Price, levels[i].Volume) );
+					}
+				}
+				else if ( i == levels.Count - 3 )
+				{
+					if ( levels[i].Volume > levels[i - 1].Volume &&
+							 levels[i].Volume > levels[i - 2].Volume &&
+							 levels[i].Volume > levels[i - 3].Volume &&
+							 levels[i].Volume > levels[i + 1].Volume &&
+							 levels[i].Volume > levels[i + 2].Volume )
+					{
+						fractals.Add( (levels[i].Price, levels[i].Volume) );
+					}
+				}
+
+				else
+				{
+					if ( levels[i].Volume > levels[i - 1].Volume &&
+						 levels[i].Volume > levels[i - 2].Volume &&
+						 levels[i].Volume > levels[i - 3].Volume &&
+						 levels[i].Volume > levels[i + 1].Volume &&
+						 levels[i].Volume > levels[i + 2].Volume &&
+						 levels[i].Volume > levels[i + 3].Volume )
+					{
+						fractals.Add( (levels[i].Price, levels[i].Volume) );
+					}
+				}
+			}
+
+			return fractals;
+		}
+
+		private static List<(decimal, decimal)> FindFractalsLow( List<(decimal Price, decimal Volume)> levels )
+		{
+			List<(decimal, decimal)> fractals = new List<(decimal, decimal)>();
+			for ( int i = 0; i < levels.Count; i++ )
+			{
+				if ( i == 0 )
+				{
+					if ( levels[i].Volume > levels[i + 1].Volume &&
+						 levels[i].Volume > levels[i + 2].Volume  )
+					{
+						fractals.Add( (levels[i].Price, levels[i].Volume) );
 					}
 				}
 				else if ( i == 1 )
@@ -197,16 +296,16 @@ namespace RBTB_ServiceStrategy.Strategies
 							 levels[i].Volume > levels[i + 1].Volume &&
 							 levels[i].Volume > levels[i + 2].Volume )
 					{
-						fractals.Add( levels[i].Price );
+						fractals.Add( (levels[i].Price, levels[i].Volume) );
 					}
 				}
 
 				else if ( i == levels.Count - 1 )
 				{
 					if ( levels[i].Volume > levels[i - 1].Volume &&
-							 levels[i].Volume > levels[i - 2].Volume)
+							 levels[i].Volume > levels[i - 2].Volume )
 					{
-						fractals.Add( levels[i].Price );
+						fractals.Add( (levels[i].Price, levels[i].Volume) );
 					}
 				}
 				else if ( i == levels.Count - 2 )
@@ -215,7 +314,7 @@ namespace RBTB_ServiceStrategy.Strategies
 							 levels[i].Volume > levels[i - 2].Volume &&
 							 levels[i].Volume > levels[i + 1].Volume )
 					{
-						fractals.Add( levels[i].Price );
+						fractals.Add( (levels[i].Price, levels[i].Volume) );
 					}
 				}
 
@@ -226,25 +325,20 @@ namespace RBTB_ServiceStrategy.Strategies
 						 levels[i].Volume > levels[i + 1].Volume &&
 						 levels[i].Volume > levels[i + 2].Volume )
 					{
-						fractals.Add( levels[i].Price );
+						fractals.Add( (levels[i].Price, levels[i].Volume) );
 					}
 				}
 			}
 
-			if ( fractals.Count != 0 )
-			{
-				PriceLevel.Clear();
-				PriceLevel.AddRange( fractals );
-				if(PriceLevel.Count != 0)
-					Console.Write( $"[{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}] Уровни для торговли: {String.Join( " ", PriceLevel.Select( p => p.ToString() ).ToArray() )}" );
-			}
+			return fractals;
 		}
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="candles"></param>
-        /// <returns>true - вверх</returns>
-        private bool CalcTrend(IReadOnlyList<Candle> candles)
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="candles"></param>
+		/// <returns>true - вверх</returns>
+		private bool CalcTrend(IReadOnlyList<Candle> candles)
         {
 			return true;
             var ma = new MovingAverage();
