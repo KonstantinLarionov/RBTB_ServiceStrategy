@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34316.72
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RBTB_ServiceStrategy", "RBTB_ServiceStrategy.csproj", "{7E963B6B-FCFB-48A9-834D-5E71F6597073}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BybitTests", "..\BybitTests\BybitTests.csproj", "{A59B99F0-1185-4644-844B-FF80492BFB01}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7E963B6B-FCFB-48A9-834D-5E71F6597073}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E963B6B-FCFB-48A9-834D-5E71F6597073}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E963B6B-FCFB-48A9-834D-5E71F6597073}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E963B6B-FCFB-48A9-834D-5E71F6597073}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A59B99F0-1185-4644-844B-FF80492BFB01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A59B99F0-1185-4644-844B-FF80492BFB01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A59B99F0-1185-4644-844B-FF80492BFB01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A59B99F0-1185-4644-844B-FF80492BFB01}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0E38B52B-D50D-47C5-8999-169401FD5AF7}
+	EndGlobalSection
+EndGlobal
