@@ -6,35 +6,34 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using WebSocketSharp;
 using ErrorEventArgs = WebSocketSharp.ErrorEventArgs;
+using BybitMapper.UTA.MarketStreamsV5.Data.Enums;
+using BybitMapper.UTA.RestV5.Data.Enums;
 
 namespace RBTB_ServiceStrategy.Markets.Bybit;
-
 public class BybitWebSocket
 {
     private WebSocket _socket;
     internal MarketStreamsHandlerCompositionV5 MarketStreams { get; }
     internal UserStreamsHandlerCompositionV5 UserStreams { get; }
 
-
     public string Symbol { get; set; } = "BTCUSDT";
-    public BybitMapper.UTA.MarketStreamsV5.Data.Enums.PublicEndpointType EndpointType { get; set; } = BybitMapper.UTA.MarketStreamsV5.Data.Enums.PublicEndpointType.Trade;
-    public delegate void DepthEvent(OrderbookEvent bookEvent);
-    public event DepthEvent? DepthEv;
-    public delegate void TickEvent(TickerEvent tickEvent);
-    public event TickEvent? TickEv;
-    public delegate void TradesEvent(TradeEvent tradesEvent);
-    public event TradesEvent? TradeEv;
-    public delegate void ExecEvent(BybitMapper.UTA.UserStreamsV5.Events.BaseEvent exec);
-    public event ExecEvent? ExecEv;
-    public delegate void UserEvent(BybitMapper.UTA.UserStreamsV5.Events.BaseEvent exec);
-    public event UserEvent? UserEv;
-    public delegate void KlineEvent(BybitMapper.UTA.MarketStreamsV5.Events.KlineEvent exec);
-    public event KlineEvent? KlineEv;
-
-    public delegate void ErrorHandler(object sender, ErrorEventArgs e);
-    public event ErrorHandler? ErrorEv;
+    public PublicEndpointType EndpointType { get; set; } = PublicEndpointType.Trade;
+    public delegate void DepthHandler(OrderbookEvent bookEvent);
+    public event DepthHandler? DepthEvent;
+    public delegate void TickHandler(TickerEvent tickEvent);
+    public event TickHandler? TickEvent;
+    public delegate void TradesHandler(TradeEvent tradesEvent);
+    public event TradesHandler? TradeEvent;
+    public delegate void ExecHandler(BybitMapper.UTA.UserStreamsV5.Events.BaseEvent exec);
+    public event ExecHandler? ExecEvent;
+    public delegate void UserHandler(BybitMapper.UTA.UserStreamsV5.Events.BaseEvent exec);
+    public event UserHandler? UserEvent;
+    public delegate void KlineHanler(KlineEvent exec);
+    public event KlineHanler? KlineEvent;
+    public delegate void ErrorHandler(object sender, Exception ex);
+    public event ErrorHandler? ErrorEvent;
     public delegate void CloseHandler(object sender, CloseEventArgs e);
-    public event CloseHandler? CloseEv;
+    public event CloseHandler? CloseEvent;
 
     private static JsonSerializerOptions jsonSerializerOptions = new()
     {
@@ -55,7 +54,7 @@ public class BybitWebSocket
             return JsonSerializer.Deserialize<T>(stream, jsonSerializerOptions);
         }
     }
-    private void SocketOnOnMessage(object sender, MessageEventArgs e)
+    private void SocketOnMessage(object sender, MessageEventArgs e)
     {
         DefaultSpotEvent? baseEvent = null;
         BybitMapper.UTA.UserStreamsV5.Events.BaseEvent? defaultEvent = null;
@@ -64,39 +63,41 @@ public class BybitWebSocket
         {
             baseEvent = MarketStreams.HandleDefaultSpotEvent(e.Data);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            ErrorEvent?.Invoke(sender, ex);
         }
 
         try
         {
             defaultEvent = UserStreams.HandleDefaultEvent(e.Data);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            ErrorEvent?.Invoke(sender, ex);
         }
 
         if (baseEvent != null)
         {
-            if (baseEvent.WSEventType == BybitMapper.UTA.MarketStreamsV5.Data.Enums.EventType.Orderbook)
+            if (baseEvent.WSEventType == EventType.Orderbook)
             {
                 var data = Deserialize<OrderbookEvent>(e.RawData)!;
-                DepthEv?.Invoke(data);
+                DepthEvent?.Invoke(data);
             }
-            else if (baseEvent.WSEventType == BybitMapper.UTA.MarketStreamsV5.Data.Enums.EventType.Tickers)
+            else if (baseEvent.WSEventType == EventType.Tickers)
             {
                 var data = Deserialize<TickerEvent>(e.RawData)!;
-                TickEv?.Invoke(data);
+                TickEvent?.Invoke(data);
             }
-            else if (baseEvent.WSEventType == BybitMapper.UTA.MarketStreamsV5.Data.Enums.EventType.Trade)
+            else if (baseEvent.WSEventType == EventType.Trade)
             {
-                var data = Deserialize<BybitMapper.UTA.MarketStreamsV5.Events.TradeEvent>(e.RawData)!;
-                TradeEv?.Invoke(data);
+                var data = Deserialize<TradeEvent>(e.RawData)!;
+                TradeEvent?.Invoke(data);
             }
-            else if (baseEvent.WSEventType == BybitMapper.UTA.MarketStreamsV5.Data.Enums.EventType.Kline)
+            else if (baseEvent.WSEventType == EventType.Kline)
             {
-                var data = Deserialize<BybitMapper.UTA.MarketStreamsV5.Events.KlineEvent>(e.RawData)!;
-                KlineEv?.Invoke(data);
+                var data = Deserialize<KlineEvent>(e.RawData)!;
+                KlineEvent?.Invoke(data);
             }
         }
 
@@ -105,37 +106,36 @@ public class BybitWebSocket
             if (defaultEvent.WSEventType == BybitMapper.UTA.UserStreamsV5.Data.Enums.EventType.Execution)
             {
                 var useEvent = UserStreams.HandleDefaultEvent(e.Data);
-                ExecEv?.Equals(useEvent);
+                ExecEvent?.Equals(useEvent);
             }
         }
     }
 
-    public void PublicSubscribe(string symbol,
-         BybitMapper.UTA.MarketStreamsV5.Data.Enums.PublicEndpointType endpointType,
-        BybitMapper.UTA.RestV5.Data.Enums.IntervalType intervalType = BybitMapper.UTA.RestV5.Data.Enums.IntervalType.Unrecognized)
+    public void PublicSubscribe(string symbol, PublicEndpointType endpointType,
+        IntervalType intervalType = IntervalType.Unrecognized)
     {
-        var cmd = BybitMapper.UTA.MarketStreamsV5.Subscriptions.CombineStreamsSubsV5.Create(symbol, endpointType,
-            BybitMapper.UTA.MarketStreamsV5.Data.Enums.SubType.Subscribe, intervalType);
-        _socket.Send(cmd);
+        var request = BybitMapper.UTA.MarketStreamsV5.Subscriptions.CombineStreamsSubsV5.Create(symbol, endpointType,
+            SubType.Subscribe, intervalType);
+        _socket.Send(request);
     }
 
     public void Start()
     {
         _socket.SslConfiguration.EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12;
-        _socket.OnMessage += SocketOnOnMessage!;
+        _socket.OnMessage += SocketOnMessage!;
         _socket.Connect();
-        _socket.OnError += SocketOnOnError!;
-        _socket.OnClose += SocketOnOnClose!;
+        _socket.OnError += SocketOnError!;
+        _socket.OnClose += SocketOnClose!;
     }
 
-    public void SocketOnOnClose(object sender, CloseEventArgs e)
+    public void SocketOnClose(object sender, CloseEventArgs e)
     {
-        CloseEv?.Invoke(sender, e);
+        CloseEvent?.Invoke(sender, e);
     }
 
-    public void SocketOnOnError(object sender, ErrorEventArgs e)
+    public void SocketOnError(object sender, ErrorEventArgs e)
     {
-        ErrorEv?.Invoke(sender, e);
+        ErrorEvent?.Invoke(sender, e.Exception);
     }
 
     public void Stop()

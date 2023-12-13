@@ -2,9 +2,9 @@
 using System.Net;
 using System.Net.WebSockets;
 using System.Text;
-using BinanceMapper.Spot.Exchange.V3.Data;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+
 using RBTB_ServiceStrategy.Domain.States;
 
 namespace RBTB_ServiceStrategy.Controllers;
@@ -83,7 +83,7 @@ public class WebsocketController: ControllerBase
 
     private async void WsEventsOnStrategyTradeEv(decimal price, string symbol, decimal level)
     {
-        var bytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new
+        var bytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new
         {
             Price = price,
             Symbol = symbol,

@@ -1,13 +1,9 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 using BinanceMapper.Requests;
 using BinanceMapper.Spot.Exchange.V3;
 using BinanceMapper.Spot.Exchange.V3.Data;
 using BinanceMapper.Spot.Exchange.V3.Requests;
 using BinanceMapper.Spot.Exchange.V3.Responses;
-using BinanceMapper.Spot.Margin.V1.Responses;
 using RestSharp;
 using AccountInfoRequest = BinanceMapper.Spot.Exchange.V3.Requests.AccountInfoRequest;
 using CloseListenKeyRequest = BinanceMapper.Spot.Exchange.V3.Requests.CloseListenKeyRequest;
@@ -28,7 +24,7 @@ namespace RBTB_ServiceStrategy.Markets.Binance
 {
     public class BinanceRestClient
     {
-       readonly ExchangeApiV3HandlerComposition m_HandlerComposition;
+        readonly ExchangeApiV3HandlerComposition m_HandlerComposition;
         internal ExchangeApiV3HandlerComposition HandlerComposition => m_HandlerComposition;
 
         readonly RequestArranger m_RequestsArranger;
@@ -62,9 +58,9 @@ namespace RBTB_ServiceStrategy.Markets.Binance
                 var proxy = new WebProxy($"{ip}:{port}");
                 if (!string.IsNullOrWhiteSpace(username) || !string.IsNullOrWhiteSpace(password))
                 { proxy.Credentials = new NetworkCredential(username, password); }
-                m_RestClient.Proxy = proxy;
+                //m_RestClient.Proxy = proxy;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             { OnLogEx(ex); }
         }
         /// <summary>
@@ -72,7 +68,7 @@ namespace RBTB_ServiceStrategy.Markets.Binance
         /// </summary>
         internal void ResetProxy()
         {
-            m_RestClient.Proxy = null;
+            // m_RestClient.Proxy = null;
         }
 
         internal delegate void Log_Dlg(string sender, string message);
@@ -164,9 +160,9 @@ namespace RBTB_ServiceStrategy.Markets.Binance
             data = null;
             var request_data = new DailyTickerPriceChangeRequest();
             request_data.Symbol = symbol;
-            
+
             var request = m_RequestsArranger.Arrange(request_data);
-          
+
             string responce = string.Empty;
             try
             {
@@ -344,8 +340,8 @@ namespace RBTB_ServiceStrategy.Markets.Binance
         /// </summary>
         internal bool RequestCloseListenKey(out VoidResponse data, string listen_key)
         {
-            data = default(VoidResponse);
-            
+            data = default;
+
             var request = m_RequestsArranger.Arrange(new CloseListenKeyRequest(listen_key));
 
             string responce = string.Empty;
@@ -369,7 +365,7 @@ namespace RBTB_ServiceStrategy.Markets.Binance
             data = null;
 
             var request = m_RequestsArranger.Arrange(new AccountInfoRequest());
-            
+
             string responce = string.Empty;
             try
             {
@@ -497,7 +493,7 @@ namespace RBTB_ServiceStrategy.Markets.Binance
         /// <summary>
         /// Get all opened orders on a symbol
         /// </summary>
-        internal bool RequestCurrentlyOpenedOrders(out IReadOnlyList<OrderStatusData> data, 
+        internal bool RequestCurrentlyOpenedOrders(out IReadOnlyList<OrderStatusData> data,
             string symbol = null)
         {
             //Get all opened orders on a symbol. Careful when accessing this with no symbol.

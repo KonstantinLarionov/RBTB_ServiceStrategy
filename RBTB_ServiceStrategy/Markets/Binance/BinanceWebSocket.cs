@@ -1,5 +1,4 @@
-﻿using System;
-using BinanceMapper.Spot.MarketWS;
+﻿using BinanceMapper.Spot.MarketWS;
 using BinanceMapper.Spot.MarketWS.Data.Enums;
 using BinanceMapper.Spot.MarketWS.Events;
 using BinanceMapper.Spot.MarketWS.Subscriptions;
@@ -15,12 +14,12 @@ namespace RBTB_ServiceStrategy.Markets.Binance
 {
     public class BinanceWebSocket
     {
-        private WebSocket _socket; 
-        internal BinanceMapper.Spot.MarketWS.MarketStreamsSpotHandlerComposition DeliveryPublic { get; }
-        
-        internal BinanceMapper.Spot.Websocket.WebsocketApiV1HandlerComposition SpotPublic { get; }
-        internal BinanceMapper.Spot.UserStream.UserStreamApiV1HandlerComposition SpotUser { get; }
-        
+        private WebSocket _socket;
+        internal MarketStreamsSpotHandlerComposition DeliveryPublic { get; }
+
+        internal WebsocketApiV1HandlerComposition SpotPublic { get; }
+        internal UserStreamApiV1HandlerComposition SpotUser { get; }
+
         public string Symbol { get; set; }
         public delegate void DepthEvent(OrderBookEvent bookEvent);
         public event DepthEvent DepthEv;
@@ -98,8 +97,8 @@ namespace RBTB_ServiceStrategy.Markets.Binance
         public string SubTick()
         {
             var cmd = SpotMarketCombineStreamsSubs.CreatePublicSub(Symbol,
-                BinanceMapper.Spot.MarketWS.Data.Enums.MarketSpotSubType.Subscribe,
-                BinanceMapper.Spot.MarketWS.Data.Enums.PublicSpotEndpointType.Trade);
+                MarketSpotSubType.Subscribe,
+                PublicSpotEndpointType.Trade);
             return cmd;
         }
         public string SubDepth()

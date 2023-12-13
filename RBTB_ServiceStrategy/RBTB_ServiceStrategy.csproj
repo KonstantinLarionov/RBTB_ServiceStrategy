@@ -1,60 +1,41 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-    <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
-        <Nullable>enable</Nullable>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.0" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-        <PackageReference Include="System.Security.Permissions" Version="7.0.0" />
-        <PackageReference Include="System.Text.Json" Version="7.0.4" />
-    </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Options" Version="7.0.0" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+		<PackageReference Include="System.Security.Permissions" Version="7.0.0" />
+		<PackageReference Include="System.Text.Json" Version="7.0.4" />
+	</ItemGroup>
 
-    <ItemGroup>
-      <Reference Include="BinanceMapper">
-        <HintPath>_libs\BinanceMapper.dll</HintPath>
-      </Reference>
-      <Reference Include="BouncyCastle.Crypto">
-        <HintPath>_libs\BouncyCastle.Crypto.dll</HintPath>
-      </Reference>
-      <Reference Include="BybitMapper">
-        <HintPath>_libs\BybitMapper.dll</HintPath>
-      </Reference>
-      <Reference Include="CSCommon">
-        <HintPath>_libs\CSCommon.dll</HintPath>
-      </Reference>
-      <Reference Include="JetBrains.Annotations">
-        <HintPath>_libs\JetBrains.Annotations.dll</HintPath>
-      </Reference>
-      <Reference Include="Newtonsoft.Json">
-        <HintPath>_libs\Newtonsoft.Json.dll</HintPath>
-      </Reference>
-      <Reference Include="RestSharp">
-        <HintPath>_libs\RestSharp.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Net.Http">
-        <HintPath>_libs\System.Net.Http.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Security.Cryptography.Algorithms">
-        <HintPath>_libs\System.Security.Cryptography.Algorithms.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Security.Cryptography.Encoding">
-        <HintPath>_libs\System.Security.Cryptography.Encoding.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Security.Cryptography.Primitives">
-        <HintPath>_libs\System.Security.Cryptography.Primitives.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Security.Cryptography.X509Certificates">
-        <HintPath>_libs\System.Security.Cryptography.X509Certificates.dll</HintPath>
-      </Reference>
-      <Reference Include="websocket-sharp-with-proxy-support">
-        <HintPath>_libs\websocket-sharp-with-proxy-support.dll</HintPath>
-      </Reference>
-    </ItemGroup>
+	<ItemGroup>
+		<Reference Include="BinanceMapper">
+			<HintPath>_libs\BinanceMapper.dll</HintPath>
+		</Reference>
+		<Reference Include="BouncyCastle.Crypto">
+			<HintPath>_libs\BouncyCastle.Crypto.dll</HintPath>
+		</Reference>
+		<Reference Include="BybitMapper">
+			<HintPath>_libs\BybitMapper.dll</HintPath>
+		</Reference>
+		<Reference Include="CSCommon">
+			<HintPath>_libs\CSCommon.dll</HintPath>
+		</Reference>
+		<Reference Include="Newtonsoft.Json">
+			<HintPath>_libs\Newtonsoft.Json.dll</HintPath>
+		</Reference>
+		<Reference Include="RestSharp">
+			<HintPath>_libs\RestSharp.dll</HintPath>
+		</Reference>
+		<Reference Include="websocket-sharp-with-proxy-support">
+			<HintPath>_libs\websocket-sharp-with-proxy-support.dll</HintPath>
+		</Reference>
+	</ItemGroup>
 
 </Project>

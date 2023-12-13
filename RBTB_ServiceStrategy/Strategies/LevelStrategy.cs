@@ -1,25 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Net.Sockets;
-using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Threading.Tasks;
-
+﻿using RBTB_ServiceStrategy.Markets.Binance;
 using BinanceMapper.Requests;
 using BinanceMapper.Spot.Exchange.V3.Data;
-using BinanceMapper.Spot.Exchange.V3.Requests;
 using BinanceMapper.Spot.Exchange.V3.Responses;
 using BinanceMapper.Spot.MarketWS.Events;
 using BinanceMapper.Spot.UserStream.Events;
 using Microsoft.Extensions.Options;
-
-using RBTB_ServiceStrategy.Database;
 using RBTB_ServiceStrategy.Database.Entities;
 using RBTB_ServiceStrategy.Domain.Options;
 using RBTB_ServiceStrategy.Domain.States;
-using RBTB_ServiceStrategy.Markets.Binance;
 using RBTB_ServiceStrategy.Notification.Telergam;
 
 namespace RBTB_ServiceStrategy.Strategies
