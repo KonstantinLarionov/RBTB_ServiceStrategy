@@ -17,6 +17,7 @@ public class TelegramClient
         HttpClient = httpClientFactory.CreateClient();
         System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
     }
+
     public void SendMessage(string mess) =>
         HttpClient
             .GetAsync($"https://api.telegram.org/bot{Token}/sendMessage?chat_id={Chat}&text={mess}")

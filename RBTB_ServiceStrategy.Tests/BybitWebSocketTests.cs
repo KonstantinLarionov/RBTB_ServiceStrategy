@@ -2,7 +2,6 @@ using NUnit.Framework;
 using RBTB_ServiceStrategy.Markets.Bybit;
 
 namespace BybitTests;
-
 public class BybitWebSocketTests
 {
     private string _symbol = "BTCUSDT";

@@ -60,6 +60,16 @@ public class BybitRestClient
         var request = new GetOrderbookRequest(category, symbol);
         var response = await BybitHelpers.GetContentAsync<GetOrderbookResponse>(request, _arranger, _client);
 
+        if (response == null)
+        {
+            OnLogEx(new NullReferenceException(message: nameof(KlineResult)));
+            return null;
+        }
+        if (response.RetCode != 0)
+        {
+            OnLogEx(new Exception(message: response.RetMsg));
+        }
+
         return response != null ? response.Result : null;
     }
 
@@ -90,6 +100,16 @@ public class BybitRestClient
     {
         var requesrt = new ServerTimeRequest();
         var response = await BybitHelpers.GetContentAsync<ServerTimeResponse>(requesrt, _arranger, _client);
+
+        if (response == null)
+        {
+            OnLogEx(new NullReferenceException(message: nameof(KlineResult)));
+            return null;
+        }
+        if (response.RetCode != 0)
+        {
+            OnLogEx(new Exception(message: response.RetMsg));
+        }
 
         return response != null ? response.Result : null;
     }

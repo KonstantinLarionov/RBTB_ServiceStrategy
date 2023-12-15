@@ -15,18 +15,20 @@ public static class BybitHelpers
     internal static async Task<T?> GetContentAsync<T>(RequestPayload request, RequestArranger arranger, CommonHttpClient client)
     {
         var arrange = arranger.Arrange(request);
-        var content = await client.GetContentAsync<T>(GetHttpMethod(arrange.Method), arrange.Query, null!, null!);
+        T? content;
+        try
+        {
+            content = await client.GetContentAsync<T>(GetHttpMethod(arrange.Method), arrange.Query, null!, null!);
+        }
+        catch (Exception)
+        {
+
+            return default(T);
+        }
 
         return content;
     }
 
-    public static T GetContent<T>(RequestPayload request, RequestArranger arranger, CommonHttpClient client)
-    {
-        var arrange = arranger.Arrange(request);    
-        var content = client.GetContent<T>(GetHttpMethod(arrange.Method), arrange.Query, null!, null!);
-
-        return content;
-    }
     private static HttpMethod GetHttpMethod(RequestMethod method)
     {
         switch (method)

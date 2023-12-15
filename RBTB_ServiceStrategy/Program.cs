@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-
 using RBTB_ServiceStrategy.Background;
 using RBTB_ServiceStrategy.Database;
 using RBTB_ServiceStrategy.Domain.Options;
@@ -40,7 +39,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
 app.UseWebSockets();
 app.MapControllers();

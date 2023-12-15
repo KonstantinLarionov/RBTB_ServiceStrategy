@@ -20,10 +20,12 @@ namespace RBTB_ServiceStrategy.Strategies
         {
             sampleAccumulator += newSample;
             samples.Enqueue(newSample);
+
             if (samples.Count > windowSize)
             {
                 sampleAccumulator -= samples.Dequeue();
             }
+
             Average = sampleAccumulator / samples.Count;
         }
     }

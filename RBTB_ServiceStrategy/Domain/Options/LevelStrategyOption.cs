@@ -4,6 +4,8 @@ public class LevelStrategyOption
 {
     public string WsUrl { get; set; }
     public string Url { get; set; }
+    public string Api { get; set; }
+    public string Secret { get; set; }
     public string Symbol { get; set; }
     public decimal ScopePrice { get; set; }
     public bool IsStart { get; set; }

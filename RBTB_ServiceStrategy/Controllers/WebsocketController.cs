@@ -39,9 +39,9 @@ public class WebsocketController: ControllerBase
                 HttpContext.Response.StatusCode = (int) HttpStatusCode.BadRequest;
             }
         }
-        catch (Exception e)
+        catch (Exception)
         {
-                
+            HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
         }
     }
 
@@ -75,7 +75,7 @@ public class WebsocketController: ControllerBase
                 result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
             }
         }
-        catch (Exception e)
+        catch (Exception)
         {
 
         }
@@ -96,8 +96,7 @@ public class WebsocketController: ControllerBase
                 WebSocketMessageType.Text, true, CancellationToken.None);
     }
 
-
     private string GetStringFromByte(byte[] buffer)
-         => System.Text.Encoding.UTF8.GetString(buffer);
+         => Encoding.UTF8.GetString(buffer);
 
 }

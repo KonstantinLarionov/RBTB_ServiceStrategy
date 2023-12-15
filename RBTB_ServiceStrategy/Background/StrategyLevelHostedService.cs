@@ -3,16 +3,15 @@ using RBTB_ServiceStrategy.Database.Entities;
 using RBTB_ServiceStrategy.Strategies;
 
 namespace RBTB_ServiceStrategy.Background;
-
 public class StrategyLevelHostedService : BackgroundService
 {
     private readonly LevelStrategy _strategy;
-	private AnaliticContext _context;
+	private readonly AnaliticContext _context;
 	private Timer? _timerTrend = null;
     private Timer? _timerStr = null;
 	private Timer _dbl;
-	private Timer _timerFractals;
-	private List<Level> levels;
+	private Timer? _timerFractals;
+	private List<Level> levels = new();
 
 	public StrategyLevelHostedService(LevelStrategy strategy, AnaliticContext context)
     {
@@ -29,7 +28,6 @@ public class StrategyLevelHostedService : BackgroundService
 	{
 		_strategy.Init();
 		
-
 		_timerFractals = new Timer( ( _ ) => _strategy.CreateTradingLevel( levels ), null, TimeSpan.Zero,
 			TimeSpan.FromHours( 2 ) );
 
@@ -38,7 +36,6 @@ public class StrategyLevelHostedService : BackgroundService
 
 		_timerStr = new Timer( ( _ ) => _strategy.Handle(), null, TimeSpan.Zero,
 			TimeSpan.FromMilliseconds( 100 ) );
-
 
 		return Task.CompletedTask;
 	}

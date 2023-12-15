@@ -24,7 +24,7 @@ public class BybitWebSocket
     public event TickHandler? TickEvent;
     public delegate void TradesHandler(TradeEvent tradesEvent);
     public event TradesHandler? TradeEvent;
-    public delegate void ExecHandler(BybitMapper.UTA.UserStreamsV5.Events.BaseEvent exec);
+    public delegate void ExecHandler(BaseEvent exec);
     public event ExecHandler? ExecEvent;
     public delegate void UserHandler(BybitMapper.UTA.UserStreamsV5.Events.BaseEvent exec);
     public event UserHandler? UserEvent;
@@ -54,6 +54,7 @@ public class BybitWebSocket
             return JsonSerializer.Deserialize<T>(stream, jsonSerializerOptions);
         }
     }
+
     private void SocketOnMessage(object sender, MessageEventArgs e)
     {
         DefaultSpotEvent? baseEvent = null;
@@ -123,9 +124,9 @@ public class BybitWebSocket
     {
         _socket.SslConfiguration.EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12;
         _socket.OnMessage += SocketOnMessage!;
-        _socket.Connect();
         _socket.OnError += SocketOnError!;
         _socket.OnClose += SocketOnClose!;
+        _socket.Connect();
     }
 
     public void SocketOnClose(object sender, CloseEventArgs e)
