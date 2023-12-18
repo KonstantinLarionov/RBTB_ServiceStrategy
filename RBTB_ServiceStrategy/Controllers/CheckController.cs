@@ -9,17 +9,13 @@ public class CheckController : ControllerBase
     private readonly string _symbol;
     private readonly string _url;
     private readonly BybitRestClient _bybitRestClient;
-    private readonly string _api;    
-    private readonly string _secret;
 
     public CheckController(IOptions<LevelStrategyOption> bybitOptions)
     {
         _url = bybitOptions.Value.Url;
-        _api = bybitOptions.Value.Api;
-        _secret = bybitOptions.Value.Secret;
         _symbol = bybitOptions.Value.Symbol;
 
-        _bybitRestClient = new BybitRestClient(_url, _api, _secret);
+        _bybitRestClient = new BybitRestClient(_url);
     }
 
     [HttpGet("orderbook")]

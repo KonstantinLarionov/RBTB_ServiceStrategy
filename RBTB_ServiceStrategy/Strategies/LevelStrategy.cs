@@ -43,7 +43,7 @@ public class LevelStrategy
         Symbol = _lso.Symbol;
         IsStart = _lso.IsStart;
 
-        _client = new BybitRestClient(_url, _api, _secret);
+        _client = new BybitRestClient(_url);
 
         _socket = new BybitWebSocket(_wsurl);
         _socket.ExecEvent += SocketOnExecEv;

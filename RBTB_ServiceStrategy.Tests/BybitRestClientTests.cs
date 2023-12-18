@@ -7,13 +7,11 @@ public class BybitRestClientTests
     private string _symbol = "ADAUSDT";
     private const string _url = "https://api.bybit.com";
     private BybitRestClient _bybitRestClient;
-    private string _api = "6CjIuMxhY8DAhWu03C";
-    private string _secret = "DoGlywXMEp8pvt9s5L2vYwIuoXBUnnSulHby";
 
     [SetUp]
     public void Setup()
     {
-        _bybitRestClient = new BybitRestClient(_url, _api, _secret);   
+        _bybitRestClient = new BybitRestClient(_url);   
     }
 
     [Test]

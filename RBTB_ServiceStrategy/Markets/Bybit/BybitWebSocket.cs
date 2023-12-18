@@ -126,6 +126,7 @@ public class BybitWebSocket
         _socket.OnMessage += SocketOnMessage!;
         _socket.OnError += SocketOnError!;
         _socket.OnClose += SocketOnClose!;
+
         _socket.Connect();
     }
 

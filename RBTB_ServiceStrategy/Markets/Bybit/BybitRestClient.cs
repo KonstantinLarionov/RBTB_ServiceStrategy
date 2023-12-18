@@ -22,10 +22,10 @@ public class BybitRestClient
         IncludeFields = true
     };
 
-    public BybitRestClient(string url, string api, string secret)
+    public BybitRestClient(string url)
     {
         _client = new(url);
-        _arranger = new RequestArranger(api, secret);
+        _arranger = new RequestArranger("api", "key");
     }
 
     #region [Base]
