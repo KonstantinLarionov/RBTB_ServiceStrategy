@@ -23,6 +23,8 @@ public class LevelStrategy
     private BybitWebSocket _socket;
     private List<decimal> PriceLevel = new List<decimal>();
     private List<decimal> PriceLevelUse = new List<decimal>();
+    private Timer _pingSender;
+
     public LevelStrategyState StateNow { get; set; } = new LevelStrategyState();
     public decimal ScopePrice { get; set; } = 5;
     public string Symbol { get; set; } = "BTCUSDT";
@@ -82,6 +84,7 @@ public class LevelStrategy
         _socket.Symbol = this.Symbol;
         _socket.Start();
         _socket.PublicSubscribe(Symbol, BybitMapper.UTA.MarketStreamsV5.Data.Enums.PublicEndpointType.Trade, IntervalType.OneMinute);
+        _pingSender = new Timer((_)=> _socket.Ping(), null,  TimeSpan.Zero, TimeSpan.FromSeconds(20));
     }
 
 
@@ -382,6 +385,11 @@ public class LevelStrategy
 
     private void SocketOnExecEv(BaseEvent exec)
     {
+        Console.WriteLine("Socket Error");
+        Console.WriteLine("Reconnect");
+
+        _socket.Start();
+        _socket.PublicSubscribe(Symbol, BybitMapper.UTA.MarketStreamsV5.Data.Enums.PublicEndpointType.Trade, IntervalType.OneMinute);
     }
     #endregion
 }

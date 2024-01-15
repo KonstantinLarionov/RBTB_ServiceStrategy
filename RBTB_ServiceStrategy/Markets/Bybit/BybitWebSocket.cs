@@ -8,6 +8,7 @@ using WebSocketSharp;
 using ErrorEventArgs = WebSocketSharp.ErrorEventArgs;
 using BybitMapper.UTA.MarketStreamsV5.Data.Enums;
 using BybitMapper.UTA.RestV5.Data.Enums;
+using System.Text;
 
 namespace RBTB_ServiceStrategy.Markets.Bybit;
 public class BybitWebSocket
@@ -118,6 +119,11 @@ public class BybitWebSocket
         var request = BybitMapper.UTA.MarketStreamsV5.Subscriptions.CombineStreamsSubsV5.Create(symbol, endpointType,
             SubType.Subscribe, intervalType);
         _socket.Send(request);
+    }
+
+    public void Ping()
+    {
+        _socket.Send(Encoding.UTF8.GetBytes("ping"));
     }
 
     public void Start()
