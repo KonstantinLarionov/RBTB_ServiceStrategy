@@ -3,7 +3,7 @@
 	public class Level
 	{
 		public int Id { get; set; }
-		public string Symbol { get; set; }
+		public string Symbol { get; set; } = null!;
 		public decimal Price { get; set; }
 		public decimal Volume { get; set; }
 		public DateTime DateCreate { get; set; }

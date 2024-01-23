@@ -17,7 +17,7 @@ namespace RBTB_ServiceStrategy.Controllers;
 public class WebsocketController: ControllerBase
 {
     private Guid idUser;
-    private WebSocket webSocket;
+    private WebSocket? webSocket;
     
     public WebsocketController()
     {
@@ -91,7 +91,7 @@ public class WebsocketController: ControllerBase
             Level = level
         }));
         
-        if (webSocket.State == WebSocketState.Open)
+        if (webSocket?.State == WebSocketState.Open)
             await webSocket.SendAsync(new ArraySegment<byte>(bytes, 0, bytes.Length),
                 WebSocketMessageType.Text, true, CancellationToken.None);
     }

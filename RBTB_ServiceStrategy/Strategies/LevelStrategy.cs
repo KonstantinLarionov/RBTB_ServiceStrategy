@@ -1,13 +1,13 @@
-﻿using Microsoft.Extensions.Options;
+﻿using BybitMapper.UTA.MarketStreamsV5.Events;
+using BybitMapper.UTA.RestV5.Data.Enums;
+using BybitMapper.UTA.RestV5.Data.ObjectDTO.Market.Kline;
+using Microsoft.Extensions.Options;
+using RBTB_ServiceStrategy.Database;
 using RBTB_ServiceStrategy.Database.Entities;
 using RBTB_ServiceStrategy.Domain.Options;
 using RBTB_ServiceStrategy.Domain.States;
-using RBTB_ServiceStrategy.Notification.Telergam;
 using RBTB_ServiceStrategy.Markets.Bybit;
-using BybitMapper.UTA.MarketStreamsV5.Events;
-using BybitMapper.UTA.RestV5.Data.Enums;
-using BybitMapper.UTA.RestV5.Data.ObjectDTO.Market.Kline;
-using RBTB_ServiceStrategy.Database;
+using RBTB_ServiceStrategy.Notification.Telergam;
 
 namespace RBTB_ServiceStrategy.Strategies;
 public class LevelStrategy
@@ -17,20 +17,20 @@ public class LevelStrategy
     private readonly LevelStrategyOption _lso;
     private readonly string _wsurl;
     private readonly string _url;
-    private readonly string _api;
-    private readonly string _secret;
     private BybitRestClient _client;
     private BybitWebSocket _socket;
     private List<decimal> PriceLevel = new List<decimal>();
     private List<decimal> PriceLevelUse = new List<decimal>();
-    private Timer _pingSender;
+    private Timer? _pingSender;
+    private object _lockerHandle = new();
 
-    public LevelStrategyState StateNow { get; set; } = new LevelStrategyState();
-    public decimal ScopePrice { get; set; } = 5;
-    public string Symbol { get; set; } = "BTCUSDT";
-    public bool IsStart { get; set; } = false;
-    public int ScoopPriceDown { get; set; } = 50;
-    public List<decimal> PriceBufferComeDown { get; set; } = new List<decimal>();
+    private LevelStrategyState _stateNow = new LevelStrategyState();
+    private decimal _scopePrice = 5;
+    private string _symbol = "BTCUSDT";
+    private bool _isStart = false;
+    private int _scopePriceDown = 50;
+    private int _counterReconnectWS = 40;
+    private List<decimal> _priceBufferComeDown = new List<decimal>();
 
     public LevelStrategy(TelegramClient telegramClient, IOptions<LevelStrategyOption> lso, ILogger<LevelStrategy> logger, AnaliticContext context)
     {
@@ -39,19 +39,18 @@ public class LevelStrategy
         _lso = lso.Value;
         _wsurl = _lso.WsUrl;
         _url = _lso.Url;
-        _api = _lso.Api;
-        _secret = _lso.Secret;
-        ScopePrice = _lso.ScopePrice;
-        Symbol = _lso.Symbol;
-        IsStart = _lso.IsStart;
+        _scopePrice = _lso.ScopePrice;
+        _symbol = _lso.Symbol;
+        _isStart = _lso.IsStart;
+        _counterReconnectWS = _lso.CounterReconnectWS;
+
+        _socket = new BybitWebSocket(_wsurl, _counterReconnectWS);
+        _socket.ExecEvent += SocketOnExecEv;
+        _socket.TradeEvent += SocketOnTradeEv;
+        _socket.OpenEvent += SocketOnOpen;
+        _socket.CloseEvent += SocketOnClose;
 
         _client = new BybitRestClient(_url);
-
-        _socket = new BybitWebSocket(_wsurl);
-        _socket.ExecEvent += SocketOnExecEv;
-        _socket.DepthEvent += SocketOnDepthEv;
-        _socket.TradeEvent += SocketOnTradeEv;
-        _socket.UserEvent += SocketOnUserEv;
     }
 
     public void Start()
@@ -81,38 +80,55 @@ public class LevelStrategy
     {
         _logger.LogInformation("Инициализация стратегии уровней");
 
-        _socket.Symbol = this.Symbol;
+        _socket.Symbol = this._symbol;
         _socket.Start();
-        _socket.PublicSubscribe(Symbol, BybitMapper.UTA.MarketStreamsV5.Data.Enums.PublicEndpointType.Trade, IntervalType.OneMinute);
-        _pingSender = new Timer((_)=> _socket.Ping(), null,  TimeSpan.Zero, TimeSpan.FromSeconds(20));
+
+        _pingSender = new Timer((_) => _socket.Ping(), null, TimeSpan.Zero, TimeSpan.FromSeconds(20));
     }
 
 
     public void CalcTrend()
     {
-        var klines = _client.RequestGetKlineAsync(MarketCategory.Spot, Symbol, IntervalType.OneMinute, limit: 200).GetAwaiter().GetResult()!;
-        if (klines.List != null)
+        try
         {
-            this.StateNow.IsUpTrend = CalcTrend(klines.List);
+            var klines = _client.RequestGetKlineAsync(MarketCategory.Spot, _symbol, IntervalType.OneMinute, limit: 200).GetAwaiter().GetResult()!;
+            if (klines.List != null)
+            {
+                this._stateNow.IsUpTrend = CalcTrend(klines.List);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[Calc trend] - error: {ex.Message}\n{ex.StackTrace}");
         }
     }
 
     public bool Handle()
     {
-        if (!IsStart)
+        if (!_isStart)
         { return false; }
 
-        AccumulationPriceDown_Long();
-
-        var finder = PriceLevel
-            .FirstOrDefault(x => (x + ScopePrice >= StateNow.PriceNow)
-                                        && (x - ScopePrice <= StateNow.PriceNow)
-                                        && StateNow.PriceNow != 0);
-
-        if (finder != 0 && IsPriceDown_Long())
+        if (Monitor.TryEnter(_lockerHandle))
         {
-            _logger.LogInformation("Все условия стратегии соблюдены, отсылаю сигнал на торговлю: " + finder);
-            WsEvents.InvokeSTE(StateNow.PriceNow, Symbol, finder);
+            try
+            {
+                AccumulationPriceDown_Long();
+
+                var finder = PriceLevel
+                    .FirstOrDefault(x => (x + _scopePrice >= _stateNow.PriceNow)
+                                                && (x - _scopePrice <= _stateNow.PriceNow)
+                                                && _stateNow.PriceNow != 0);
+
+                if (finder != 0 && IsPriceDown_Long())
+                {
+                    _logger.LogInformation("Все условия стратегии соблюдены, отсылаю сигнал на торговлю: " + finder);
+                    WsEvents.InvokeSTE(_stateNow.PriceNow, _symbol, finder);
+                }
+            }
+            finally
+            {
+                Monitor.Exit(_lockerHandle);
+            }
         }
 
         return true;
@@ -120,19 +136,19 @@ public class LevelStrategy
 
     private void AccumulationPriceDown_Long()
     {
-        if (StateNow.PriceNow == 0)
+        if (_stateNow.PriceNow == 0)
             return;
 
-        if (PriceBufferComeDown.Count == 0)
-        { PriceBufferComeDown.Add(StateNow.PriceNow); return; }
+        if (_priceBufferComeDown.Count == 0)
+        { _priceBufferComeDown.Add(_stateNow.PriceNow); return; }
 
-        if (PriceBufferComeDown.Any(x => x < StateNow.PriceNow))
-        { PriceBufferComeDown.Clear(); }
+        if (_priceBufferComeDown.Any(x => x < _stateNow.PriceNow))
+        { _priceBufferComeDown.Clear(); }
         else
-        { PriceBufferComeDown.Add(StateNow.PriceNow); }
+        { _priceBufferComeDown.Add(_stateNow.PriceNow); }
 
-        if (PriceBufferComeDown.Count > 60)
-        { PriceBufferComeDown.RemoveAt(0); }
+        if (_priceBufferComeDown.Count > 60)
+        { _priceBufferComeDown.RemoveAt(0); }
     }
 
     private bool IsPriceDown_Long()
@@ -140,7 +156,7 @@ public class LevelStrategy
         _logger.LogInformation("Найден уровень");
         _logger.LogInformation("Проверяю историю цены на отскок..");
 
-        if (PriceBufferComeDown.Count >= ScoopPriceDown)
+        if (_priceBufferComeDown.Count >= _scopePriceDown)
         {
             _logger.LogInformation("История подтвердила отскок");
             return true;
@@ -148,7 +164,7 @@ public class LevelStrategy
         else
         {
             _logger.LogInformation("Отскок не подтвержден, список цен:");
-            _logger.LogInformation(string.Join("\r\n", PriceBufferComeDown));
+            _logger.LogInformation(string.Join("\r\n", _priceBufferComeDown));
             return false;
         }
     }
@@ -331,7 +347,7 @@ public class LevelStrategy
         {
             ma.ComputeAverage(candle.ClosePrice == null ? 0 : candle.ClosePrice.Value);
         }
-        return this.StateNow.PriceNow > ma.Average;
+        return this._stateNow.PriceNow > ma.Average;
     }
 
     public void SetPriceLevel(decimal price)
@@ -339,7 +355,7 @@ public class LevelStrategy
         if (!PriceLevel.Contains(price))
         {
             PriceLevel.Add(price);
-            StateNow.Levels += " " + price;
+            _stateNow.Levels += " " + price;
         }
     }
 
@@ -348,7 +364,7 @@ public class LevelStrategy
         if (!PriceLevelUse.Contains(price))
         {
             PriceLevelUse.Add(price);
-            StateNow.LevelsUse += " " + price;
+            _stateNow.LevelsUse += " " + price;
         }
     }
 
@@ -363,33 +379,33 @@ public class LevelStrategy
     #endregion
 
     #region  [Events]
-    private void SocketOnUserEv(BybitMapper.UTA.UserStreamsV5.Events.BaseEvent exec)
-    {
-    }
 
     private void SocketOnTradeEv(TradeEvent tradeevent)
     {
-        if (!IsStart)
+        if (!_isStart)
         { return; }
-        StateNow.PriceNow = tradeevent.Data[0].Price!.Value;
-        StateNow.VolumeNow = tradeevent.Data[0].Volume!.Value;
+        _stateNow.PriceNow = tradeevent.Data[0].Price!.Value;
+        _stateNow.VolumeNow = tradeevent.Data[0].Volume!.Value;
         if (tradeevent.Data == null)
         {
             return;
         }
     }
 
-    private void SocketOnDepthEv(OrderbookEvent bookevent)
+    private void SocketOnClose(object sender, WebSocketSharp.CloseEventArgs e)
     {
+        _pingSender = null;
+    }
+
+    private void SocketOnOpen(object sender, EventArgs e)
+    {
+        _socket.PublicSubscribe(_symbol, BybitMapper.UTA.MarketStreamsV5.Data.Enums.PublicEndpointType.Trade, IntervalType.OneMinute);
+        _pingSender = new Timer((_) => _socket.Ping(), null, TimeSpan.FromSeconds(20), TimeSpan.FromSeconds(20));
     }
 
     private void SocketOnExecEv(BaseEvent exec)
     {
-        Console.WriteLine("Socket Error");
-        Console.WriteLine("Reconnect");
-
-        _socket.Start();
-        _socket.PublicSubscribe(Symbol, BybitMapper.UTA.MarketStreamsV5.Data.Enums.PublicEndpointType.Trade, IntervalType.OneMinute);
+        _pingSender = null!;
     }
     #endregion
 }

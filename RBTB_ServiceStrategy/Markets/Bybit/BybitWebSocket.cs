@@ -9,6 +9,7 @@ using ErrorEventArgs = WebSocketSharp.ErrorEventArgs;
 using BybitMapper.UTA.MarketStreamsV5.Data.Enums;
 using BybitMapper.UTA.RestV5.Data.Enums;
 using System.Text;
+using System.Diagnostics.Metrics;
 
 namespace RBTB_ServiceStrategy.Markets.Bybit;
 public class BybitWebSocket
@@ -27,25 +28,30 @@ public class BybitWebSocket
     public event TradesHandler? TradeEvent;
     public delegate void ExecHandler(BaseEvent exec);
     public event ExecHandler? ExecEvent;
-    public delegate void UserHandler(BybitMapper.UTA.UserStreamsV5.Events.BaseEvent exec);
-    public event UserHandler? UserEvent;
     public delegate void KlineHanler(KlineEvent exec);
     public event KlineHanler? KlineEvent;
     public delegate void ErrorHandler(object sender, Exception ex);
     public event ErrorHandler? ErrorEvent;
     public delegate void CloseHandler(object sender, CloseEventArgs e);
     public event CloseHandler? CloseEvent;
+    public delegate void OpenHandler(object sender, EventArgs e);
+    public event OpenHandler? OpenEvent;
+
+    private int _reconnectCounter = 40;
+    private int _WSreconnectCounter;
 
     private static JsonSerializerOptions jsonSerializerOptions = new()
     {
         NumberHandling = JsonNumberHandling.AllowReadingFromString
     };
 
-    public BybitWebSocket(string url)
+    public BybitWebSocket(string url, int counterReconnect = 40)
     {
         _socket = new WebSocket(url);
         MarketStreams = new MarketStreamsHandlerCompositionV5();
         UserStreams = new UserStreamsHandlerCompositionV5();
+
+        _reconnectCounter = counterReconnect;
     }
 
     private static T? Deserialize<T>(byte[] message)
@@ -132,18 +138,38 @@ public class BybitWebSocket
         _socket.OnMessage += SocketOnMessage!;
         _socket.OnError += SocketOnError!;
         _socket.OnClose += SocketOnClose!;
+        _socket.OnOpen += SocketOnOpen!;
 
         _socket.Connect();
     }
 
     public void SocketOnClose(object sender, CloseEventArgs e)
     {
+        if(!e.WasClean)
+        {
+            if (!_socket.IsAlive && _WSreconnectCounter > 0)
+            {
+                _WSreconnectCounter--;
+                Console.WriteLine($"Попытка переподключения. Осталось попыток {_WSreconnectCounter}");
+
+                Thread.Sleep(1500);
+                _socket.Connect();
+            }
+        }
+
         CloseEvent?.Invoke(sender, e);
     }
 
     public void SocketOnError(object sender, ErrorEventArgs e)
     {
         ErrorEvent?.Invoke(sender, e.Exception);
+    }
+
+    public void SocketOnOpen(object sender, EventArgs e)
+    {
+        _WSreconnectCounter = _reconnectCounter;
+
+        OpenEvent?.Invoke(sender, e);
     }
 
     public void Stop()

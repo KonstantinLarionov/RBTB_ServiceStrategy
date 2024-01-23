@@ -12,7 +12,7 @@ public class StrategyLevelHostedService : BackgroundService
 	private Timer _dbl;
 	private Timer? _timerFractals;
 	private List<Level> levels = new();
-
+	private object locker = new();
 	public StrategyLevelHostedService(LevelStrategy strategy, AnaliticContext context)
     {
         _strategy = strategy ?? throw new ArgumentException(nameof(strategy));
@@ -20,8 +20,18 @@ public class StrategyLevelHostedService : BackgroundService
 		var b = _context.Database.CanConnect(); 
 		_dbl = new Timer( ( _ ) =>
 		{
-			levels = _context.Levels.ToList();
-		}, null, 0, 10000 );
+			if(Monitor.TryEnter(locker))
+			{
+				try
+				{
+					levels = _context.Levels.ToList();
+				}
+				finally
+				{
+					Monitor.Exit(locker);
+				}
+			}
+		}, null, 0, 10 );
 	}
 
 	protected override Task ExecuteAsync( CancellationToken stoppingToken )
