@@ -394,7 +394,10 @@ public class LevelStrategy
 
     private void SocketOnClose(object sender, WebSocketSharp.CloseEventArgs e)
     {
-        _pingSender = null;
+        if (_pingSender != null)
+        {
+            _pingSender.Dispose();
+        }
     }
 
     private void SocketOnOpen(object sender, EventArgs e)
@@ -405,7 +408,10 @@ public class LevelStrategy
 
     private void SocketOnExecEv(BaseEvent exec)
     {
-        _pingSender = null!;
+        if (_pingSender != null)
+        {
+            _pingSender.Dispose();
+        }
     }
     #endregion
 }

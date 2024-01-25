@@ -27,7 +27,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContextFactory<AnaliticContext>(
-    options => { options.UseNpgsql(builder.Configuration.GetConnectionString("DbConnection")); }, ServiceLifetime.Transient);
+    options =>
+    {
+        options.UseNpgsql(builder.Configuration.GetConnectionString("DbConnection"), build =>
+        {
+            build.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+        });
+    }, ServiceLifetime.Transient);
 
 var app = builder.Build();
 
