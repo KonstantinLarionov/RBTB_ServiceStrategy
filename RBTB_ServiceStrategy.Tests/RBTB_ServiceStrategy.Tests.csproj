@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+
+		<IsPackable>false</IsPackable>
+		<IsTestProject>true</IsTestProject>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+		<PackageReference Include="NUnit" Version="4.0.1" />
+		<PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+		<PackageReference Include="NUnit.Analyzers" Version="3.10.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="coverlet.collector" Version="6.0.0">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\RBTB_ServiceStrategy\RBTB_ServiceStrategy.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="ByBitMapper">
+			<HintPath>..\RBTB_ServiceStrategy\_libs\ByBitMapper.dll</HintPath>
+		</Reference>
+		<Reference Include="websocket-sharp-with-proxy-support">
+			<HintPath>..\RBTB_ServiceStrategy\_libs\websocket-sharp-with-proxy-support.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
+</Project>
