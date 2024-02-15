@@ -9,7 +9,6 @@ using ErrorEventArgs = WebSocketSharp.ErrorEventArgs;
 using BybitMapper.UTA.MarketStreamsV5.Data.Enums;
 using BybitMapper.UTA.RestV5.Data.Enums;
 using System.Text;
-using System.Diagnostics.Metrics;
 
 namespace RBTB_ServiceStrategy.Markets.Bybit;
 public class BybitWebSocket

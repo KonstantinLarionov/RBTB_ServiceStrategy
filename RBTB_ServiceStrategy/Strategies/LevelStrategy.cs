@@ -45,7 +45,7 @@ public class LevelStrategy
         _counterReconnectWS = _lso.CounterReconnectWS;
 
         _socket = new BybitWebSocket(_wsurl, _counterReconnectWS);
-        _socket.ExecEvent += SocketOnExecEv;
+        _socket.ErrorEvent += SocketOnErrorEv;
         _socket.TradeEvent += SocketOnTradeEv;
         _socket.OpenEvent += SocketOnOpen;
         _socket.CloseEvent += SocketOnClose;
@@ -92,7 +92,7 @@ public class LevelStrategy
         try
         {
             var klines = _client.RequestGetKlineAsync(MarketCategory.Spot, _symbol, IntervalType.OneMinute, limit: 200).GetAwaiter().GetResult()!;
-            if (klines.List != null)
+            if (klines != null && klines.List != null)
             {
                 this._stateNow.IsUpTrend = CalcTrend(klines.List);
             }
@@ -394,10 +394,6 @@ public class LevelStrategy
 
     private void SocketOnClose(object sender, WebSocketSharp.CloseEventArgs e)
     {
-        if (_pingSender != null)
-        {
-            _pingSender.Dispose();
-        }
     }
 
     private void SocketOnOpen(object sender, EventArgs e)
@@ -406,12 +402,13 @@ public class LevelStrategy
         _pingSender = new Timer((_) => _socket.Ping(), null, TimeSpan.FromSeconds(20), TimeSpan.FromSeconds(20));
     }
 
-    private void SocketOnExecEv(BaseEvent exec)
+    private void SocketOnErrorEv(object sender, Exception exec)
     {
         if (_pingSender != null)
         {
             _pingSender.Dispose();
         }
     }
+
     #endregion
 }
